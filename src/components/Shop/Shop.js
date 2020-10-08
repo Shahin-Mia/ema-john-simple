@@ -1,5 +1,4 @@
 import React from 'react';
-import fakeData from '../../fakeData';
 import './Shop.css';
 import { useState } from 'react';
 import Product from '../Product/Product';
@@ -7,23 +6,31 @@ import Cart from '../Cart/Cart';
 import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { CircularProgress } from '@material-ui/core';
 
 const Shop = () => {
-    const first10 = fakeData.slice(0, 10);
-    const [product, setProduct] = useState(first10);
+    const [products, setProducts] = useState([]);
 
     const [cart, setCart] = useState([]);
+
+    useEffect(() => {
+        fetch('https://polar-caverns-47902.herokuapp.com/products')
+            .then(res => res.json())
+            .then(data => setProducts(data))
+    }, [])
+
 
     useEffect(() => {
         //cart
         const savedCart = getDatabaseCart();
         const productKeys = Object.keys(savedCart);
-        const cartProduct = productKeys.map(key => {
-            const product = fakeData.find(pd => pd.key === key);
-            product.quantity = savedCart[key];
-            return product;
-        });
-        setCart(cartProduct)
+        fetch('https://polar-caverns-47902.herokuapp.com/productKeys', {
+            method: 'POST',
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify(productKeys)
+        })
+            .then(res => res.json())
+            .then(data => setCart(data));
     }, [])
 
     const handleAddProduct = (product) => {
@@ -44,12 +51,17 @@ const Shop = () => {
         setCart(newCart);
         addToDatabaseCart(product.key, count);
     }
+    let loading;
+    if (products.length === 0) {
+        loading = <CircularProgress />;
+    }
     return (
         <div className="shop-container">
             <div className="product-container">
+                {loading}
 
                 {
-                    product.map(p => <Product key={p.key} showAddToCart={true} handleAddProduct={handleAddProduct} product={p}></Product>)
+                    products.map(p => <Product key={p.key} showAddToCart={true} handleAddProduct={handleAddProduct} product={p}></Product>)
                 }
 
             </div>

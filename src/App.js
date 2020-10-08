@@ -6,7 +6,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 import Inventory from './components/Inventory/Inventory';
 import Review from './components/Review/Review';
@@ -33,9 +32,9 @@ function App() {
           <Route path="/shop">
             <Shop />
           </Route>
-          <PrivateRoute path="/review">
+          <Route path="/review">
             <Review />
-          </PrivateRoute>
+          </Route>
           <PrivateRoute path="/inventory">
             <Inventory />
           </PrivateRoute>
