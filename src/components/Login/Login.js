@@ -8,6 +8,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 const Login = () => {
 
+    // eslint-disable-next-line no-unused-vars
     const [loggedInUser, setLoggedInUser] = useContext(UserContext);
 
     const history = useHistory();

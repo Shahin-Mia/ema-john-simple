@@ -6,7 +6,7 @@ import Cart from '../Cart/Cart';
 import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { CircularProgress } from '@material-ui/core';
+import { LinearProgress } from '@material-ui/core';
 
 const Shop = () => {
     const [products, setProducts] = useState([]);
@@ -53,7 +53,7 @@ const Shop = () => {
     }
     let loading;
     if (products.length === 0) {
-        loading = <CircularProgress />;
+        loading = <LinearProgress />;
     }
     return (
         <div className="shop-container">
